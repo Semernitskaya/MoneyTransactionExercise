@@ -17,6 +17,9 @@ import static com.ol.money.transaction.response.AccountStatus.*;
 @Slf4j
 public class AccountService {
 
+    public static final String NAME_KEY = "name";
+    public static final String AMOUNT_KEY = "amount";
+
     private final AccountCache cache;
 
     private final AmountParser amountParser = new AmountParser();
@@ -24,11 +27,11 @@ public class AccountService {
     private final UserNameValidator nameValidator = new UserNameValidator();
 
     public AccountStatus addAccount(Map<String, String> parameters) {
-        var userName = parameters.get("name");
+        var userName = parameters.get(NAME_KEY);
         if (!nameValidator.isValid(userName)) {
             return INVALID_USER_NAME;
         }
-        var amountStr = parameters.get("amount");
+        var amountStr = parameters.get(AMOUNT_KEY);
         if (amountStr == null) {
             return cache.addAccount(userName) ? OK : DUPLICATE_USER_NAME;
         }
