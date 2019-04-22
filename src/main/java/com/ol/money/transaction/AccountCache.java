@@ -3,6 +3,7 @@ package com.ol.money.transaction;
 import lombok.extern.slf4j.Slf4j;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -15,14 +16,17 @@ public class AccountCache {
     private final Map<String, Account> accounts = new ConcurrentHashMap<>();
 
     public boolean addAccount(String userName) {
-        return addAccount(userName, BigDecimal.ZERO);
+        return addAccount(userName, BigDecimal.ZERO.setScale(2, RoundingMode.HALF_DOWN));
     }
 
     public boolean addAccount(String userName, BigDecimal amount) {
-//      TODO:  add name validation
         log.info("Trying to add account userName {}, amount {}", userName, amount);
         var existedAccount = accounts.putIfAbsent(userName, new Account(userName, amount));
         return existedAccount == null;
+    }
+
+    Map<String, Account> getAccounts() {
+        return accounts;
     }
 
     public Optional<Map<String, Account>> acquireAccounts(String... userNames) {
