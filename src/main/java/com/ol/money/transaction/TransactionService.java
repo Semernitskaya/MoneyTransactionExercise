@@ -17,6 +17,10 @@ import static com.ol.money.transaction.response.TransactionStatus.*;
 @Slf4j
 public class TransactionService {
 
+    public static final String FROM_KEY = "from";
+    public static final String TO_KEY = "to";
+    public static final String AMOUNT_KEY = "amount";
+
     private final AccountCache cache;
 
     private final UserNameValidator nameValidator = new UserNameValidator();
@@ -24,12 +28,15 @@ public class TransactionService {
     private final AmountParser amountParser = new AmountParser();
 
     public TransactionStatus transferMoney(Map<String, String> parameters) {
-        var fromUserName = parameters.get("from");
-        var toUserName = parameters.get("to");
-        var transferAmountStr = parameters.get("amount");
+        var fromUserName = parameters.get(FROM_KEY);
+        var toUserName = parameters.get(TO_KEY);
+        var transferAmountStr = parameters.get(AMOUNT_KEY);
         log.info("Transferring {} from user {} to user {}", transferAmountStr, fromUserName, toUserName);
         if (!nameValidator.isValid(fromUserName) || !nameValidator.isValid(toUserName)) {
             return INVALID_USER_NAME;
+        }
+        if (fromUserName.equals(toUserName)) {
+            return CANT_TRANSFER_TO_SAME_ACCOUNT;
         }
         var optionalTransferAmount = amountParser.getAmount(transferAmountStr);
         if (optionalTransferAmount.isEmpty()) {

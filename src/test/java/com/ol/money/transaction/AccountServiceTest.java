@@ -22,6 +22,7 @@ import static org.testng.Assert.assertEquals;
 public class AccountServiceTest {
 
     public static final String DUPLICATE_USER_NAME = "duplicate_user";
+
     @Mock
     private AccountCache cache;
 
