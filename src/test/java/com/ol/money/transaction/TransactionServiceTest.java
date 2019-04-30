@@ -18,7 +18,6 @@ import static com.ol.money.transaction.TransactionService.TO_KEY;
 import static com.ol.money.transaction.response.TransactionStatus.*;
 import static java.util.Map.of;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.argThat;
 import static org.mockito.Mockito.when;
 import static org.testng.Assert.assertEquals;
 
